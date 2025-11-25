@@ -1,0 +1,46 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 10px 20px;
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav a {
+    color: #fff;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+}
+
+form div {
+    margin-bottom: 10px;
+}
+
+.error {
+    color: #d00;
+}
+
+.success {
+    color: #0a0;
+}
+
+.info {
+    color: #333;
+}
+
+.field-error {
+    color: #d00;
+    font-size: 0.9em;
+}
