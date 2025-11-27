@@ -1,4 +1,4 @@
-package com.example.authdemo.dto;
+package com.example.authdemo.config;
 
 import com.example.authdemo.domain.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,21 +18,19 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 지금은 ROLE_USER 하나만 줘도 충분해요
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword(); // DB에 저장된 암호화된 비밀번호
+        return user.getPwdHash();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getUserNm();
     }
 
-    // 계정 상태 관련 (필요하면 컬럼으로 빼도 됨)
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -50,6 +48,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled();
+        return "01".equals(user.getUserStatus());
     }
 }

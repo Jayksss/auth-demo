@@ -21,7 +21,7 @@ public class AuthService {
 
     @Transactional
     public void register(RegisterRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
+        if (userRepository.existsByLoginId(request.getUsername())) {
             throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
         }
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -29,9 +29,10 @@ public class AuthService {
         }
 
         User user = new User();
-        user.setUsername(request.getUsername());
+        user.setLoginId(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPwdHash(passwordEncoder.encode(request.getPassword()));
+        user.setUserNm(request.getUsername()); // 임시로 아이디를 이름으로 저장
 
         userRepository.save(user);
     }

@@ -1,62 +1,67 @@
 package com.example.authdemo.domain;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "USERS", schema = "spring_dev")
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID")
+    private Long userId;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String username;
+    @Column(name = "LOGIN_ID", nullable = false, unique = true, length = 50)
+    private String loginId;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(name = "PWD_HASH", nullable = false, length = 255)
+    private String pwdHash;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(name = "EMAIL", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(nullable = false)
-    private boolean enabled = true;
+    @Column(name = "USER_NM", length = 50)
+    private String userNm;
 
+    @Column(name = "BIRTH_DATE")
+    private LocalDate birthDate;
+
+    @Column(name = "PHONE_NUMBER", length = 20)
+    private String phoneNumber;
+
+    @Column(name = "ADDR", length = 255)
+    private String addr;
+
+    @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+    @Column(name = "USER_STATUS", length = 2)
+    private String userStatus = "01";
 
     public User() {
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
+    public Long getUserId() {
+        return userId;
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    public String getLoginId() {
+        return loginId;
     }
 
-    public Long getId() {
-        return id;
+    public void setLoginId(String loginId) {
+        this.loginId = loginId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getPwdHash() {
+        return pwdHash;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPwdHash(String pwdHash) {
+        this.pwdHash = pwdHash;
     }
 
     public String getEmail() {
@@ -67,19 +72,47 @@ public class User {
         this.email = email;
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public String getUserNm() {
+        return userNm;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setUserNm(String userNm) {
+        this.userNm = userNm;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAddr() {
+        return addr;
+    }
+
+    public void setAddr(String addr) {
+        this.addr = addr;
     }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public String getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(String userStatus) {
+        this.userStatus = userStatus;
     }
 }
