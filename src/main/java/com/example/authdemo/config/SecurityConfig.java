@@ -2,6 +2,7 @@ package com.example.authdemo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,38 +14,40 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        // 접근 권한 설정
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/js/**", "/images/**",
-                        "/register", "/h2-console/**").permitAll()
-                .anyRequest().authenticated()
-        );
-
-        // 로그인 설정
-        http.formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/", true)
-                .permitAll()
-        );
-
-        // 로그아웃 설정
-        http.logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-        );
-
-        // CSRF 비활성화 (데모용)
-        http.csrf(AbstractHttpConfigurer::disable);
-
-        // H2 콘솔 접근 허용
-        http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/css/**",
+                                "/js/**",
+                                "/images/**",
+                                "/h2-console/**",
+                                "/register",
+                                "/login"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout=true")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                )
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin())
+                )
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
 
-    // 비밀번호 암호화 방식 설정
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

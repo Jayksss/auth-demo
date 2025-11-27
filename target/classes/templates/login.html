@@ -1,43 +1,38 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>로그인</title>
-    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
 </head>
-<body>
-<header>
-    <h1>로그인</h1>
-    <nav>
-        <a th:href="@{/}">홈</a>
-        <a th:href="@{/register}">회원가입</a>
-    </nav>
-</header>
+<body class="page">
+<div class="auth-card">
+    <h2 class="auth-title">로그인</h2>
 
-<main>
-    <div th:if="${param.registered}">
-        <p class="success">회원가입이 완료되었어요. 로그인해 주세요.</p>
+    <div th:if="${param.registered}" class="alert alert--success">
+        회원가입이 완료되었습니다. 로그인 후 이용해주세요.
     </div>
-    <div th:if="${errorMessage}">
-        <p class="error" th:text="${errorMessage}">로그인 오류</p>
+    <div th:if="${param.error}" class="alert alert--error">
+        아이디 또는 비밀번호를 다시 확인해주세요.
     </div>
-    <div th:if="${logoutMessage}">
-        <p class="info" th:text="${logoutMessage}">로그아웃 메시지</p>
+    <div th:if="${param.logout}" class="alert alert--success">
+        정상적으로 로그아웃되었습니다.
     </div>
 
-    <form th:action="@{/login}" method="post">
-        <div>
-            <label for="username">이메일</label>
-            <input type="email" id="username" name="username" required>
+    <form class="auth-form" th:action="@{/login}" method="post">
+        <div class="form-group">
+            <input class="form-input" type="text" name="username"
+                   placeholder="아이디" required>
         </div>
-        <div>
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" required>
+        <div class="form-group">
+            <input class="form-input" type="password" name="password"
+                   placeholder="비밀번호" required>
         </div>
-        <div>
-            <button type="submit">로그인</button>
-        </div>
+
+        <button class="btn btn-primary btn-full" type="submit">로그인</button>
     </form>
-</main>
+
+    <a class="link-sub" th:href="@{/register}">회원가입</a>
+</div>
 </body>
 </html>
